@@ -55,5 +55,20 @@
 			$stmt->store_result();
 			return $stmt->num_rows > 0;
 		}
+
+		public function getAntrian()
+		{
+			$stmt = $this->con->prepare("SELECT * FROM `antrian` ORDER BY `no_antrian`");
+			$stmt->execute();
+			return $stmt->get_result();
+		}
+
+		public function getHasAntrianByNik($nik) 
+		{
+			$stmt = $this->con->prepare("SELECT * FROM `antrian` WHERE `nik` = ? && status_antrian = 'Pending'");
+			$stmt->bind_param("s", $nik);
+			$stmt->execute();
+			return $stmt->get_result()->fetch_assoc();
+		}
 	}
 ?>
