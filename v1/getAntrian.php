@@ -6,13 +6,13 @@ $response = array();
 $db = new DbOperations();
 $result = $db->getAntrian();
 
-while ($row = $result->fetch_assoc()) {
-    $item = array(
-        'no_antrian' => $row['no_antrian'],
-        'nik' => $row['nik'],
-        'status_antrian' => $row['status_antrian']
-    );
-    $response[] = $item;
+while($row = $result->fetch_assoc())
+{
+    $temp = array();
+    $temp['no_antrian'] = $row['no_antrian'];
+    $temp['nama_lengkap'] = $row['nama_lengkap'];
+    $temp['status_antrian'] = $row['status_antrian'];
+    array_push($response, $temp);
 }
-
+ 
 echo json_encode($response);

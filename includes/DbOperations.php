@@ -11,7 +11,7 @@
 			$this->con = $db->connect();
 		}
 
-		// CRUD -> Create
+// USER ---------------------------------------------------------------
 		public function createUser($nik, $nama_lengkap, $password)
 		{
 			if ($this->isUserExist($nik)) {
@@ -56,19 +56,65 @@
 			return $stmt->num_rows > 0;
 		}
 
+// ANTRIAN ---------------------------------------------------------------
 		public function getAntrian()
 		{
-			$stmt = $this->con->prepare("SELECT * FROM `antrian` ORDER BY `no_antrian`");
+			$stmt = $this->con->prepare("SELECT * FROM `antrian` INNER JOIN `user` ON `antrian`.`nik` = `user`.`nik` ORDER BY `no_antrian`");
 			$stmt->execute();
 			return $stmt->get_result();
 		}
 
 		public function getHasAntrianByNik($nik) 
 		{
-			$stmt = $this->con->prepare("SELECT * FROM `antrian` WHERE `nik` = ? && status_antrian = 'Pending'");
-			$stmt->bind_param("s", $nik);
-			$stmt->execute();
-			return $stmt->get_result()->fetch_assoc();
+		    $stmt = $this->con->prepare("SELECT * FROM `antrian` WHERE `nik` = ? AND status_antrian = 'Pending'");
+		    $stmt->bind_param("s", $nik);
+		    $stmt->execute();
+		    return $stmt->get_result()->fetch_assoc();
 		}
+
+
+		public function createAntrian($nik) 
+		{
+		    // Check if there is an existing pending antrian
+		    $existingAntrian = $this->getHasAntrianByNik($nik);
+		    if ($existingAntrian) {
+		        return array(
+		            'status' => 0,
+		            'message' => "Anda sudah mengambil No. Antrian: " . $existingAntrian['no_antrian']
+		        );
+		    }
+		    
+		    // Get the maximum existing no_antrian
+    		$maxNoAntrian = $this->getMaxNoAntrian();
+    		$newNoAntrian = $maxNoAntrian + 1;
+
+		    $stmt = $this->con->prepare("INSERT INTO `antrian` (`no_antrian`, `nik`, `status_antrian`) VALUES ($newNoAntrian, ?, 'Pending');");
+		    $stmt->bind_param("s", $nik);
+		    
+		    if ($stmt->execute()) {
+		        $newAntrianId = $stmt->insert_id;
+		        return array(
+		            'status' => 1,
+		            'message' => "Berhasil! No. Antrian: " . $newAntrianId
+		        );
+		    } else {
+		        return array(
+		            'status' => 2,
+		            'message' => "Gagal membuat No. Antrian"
+		        );
+		    }
+		}
+
+		private function getMaxNoAntrian()
+		{
+		    $stmt = $this->con->prepare("SELECT MAX(`no_antrian`) AS max_no_antrian FROM `antrian`");
+		    $stmt->execute();
+		    $result = $stmt->get_result();
+		    $row = $result->fetch_assoc();
+		    
+		    return $row['max_no_antrian'] ?? 0;
+		}
+		
 	}
+
 ?>
