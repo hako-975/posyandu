@@ -168,6 +168,22 @@
 		        );
 		    }
 		}
+
+		public function deleteAllAntrian()
+		{
+			$stmt = $this->con->prepare("DELETE FROM `antrian`");
+		    if ($stmt->execute()) {
+		        return array(
+		            'status' => 1,
+		            'message' => "Semua Antrian Berhasil Terhapus"
+		        );
+		    } else {
+		        return array(
+		            'status' => 2,
+		            'message' => "Gagal menghapus Antrian"
+		        );
+		    }
+		}
 	}
 
 ?>

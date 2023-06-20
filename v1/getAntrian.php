@@ -12,6 +12,7 @@ while($row = $result->fetch_assoc())
     $temp['no_antrian'] = $row['no_antrian'];
     $temp['nama_lengkap'] = $row['nama_lengkap'];
     $temp['status_antrian'] = $row['status_antrian'];
+    $temp['nik'] = $row['nik'];
     array_push($response, $temp);
 }
  
