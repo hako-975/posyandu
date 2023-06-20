@@ -115,6 +115,59 @@
 		    return $row['max_no_antrian'] ?? 0;
 		}
 		
+		public function batalkanAntrian($no_antrian) 
+		{
+		    $stmt = $this->con->prepare("UPDATE `antrian` SET `status_antrian` = 'Dibatalkan' WHERE `no_antrian` = ?");
+		    $stmt->bind_param("s", $no_antrian);
+		    
+		    if ($stmt->execute()) {
+		        return array(
+		            'status' => 1,
+		            'message' => "No. Antrian: " . $no_antrian . " Berhasil dibatalkan"
+		        );
+		    } else {
+		        return array(
+		            'status' => 2,
+		            'message' => "Gagal membatalkan No. Antrian: " . $no_antrian
+		        );
+		    }
+		}
+
+		public function selesaikanAntrian($no_antrian) 
+		{
+		    $stmt = $this->con->prepare("UPDATE `antrian` SET `status_antrian` = 'Selesai' WHERE `no_antrian` = ?");
+		    $stmt->bind_param("s", $no_antrian);
+		    
+		    if ($stmt->execute()) {
+		        return array(
+		            'status' => 1,
+		            'message' => "No. Antrian: " . $no_antrian . " Berhasil diselesaikan"
+		        );
+		    } else {
+		        return array(
+		            'status' => 2,
+		            'message' => "Gagal membatalkan No. Antrian: " . $no_antrian
+		        );
+		    }
+		}
+
+		public function pendingkanAntrian($no_antrian) 
+		{
+		    $stmt = $this->con->prepare("UPDATE `antrian` SET `status_antrian` = 'Pending' WHERE `no_antrian` = ?");
+		    $stmt->bind_param("s", $no_antrian);
+		    
+		    if ($stmt->execute()) {
+		        return array(
+		            'status' => 1,
+		            'message' => "No. Antrian: " . $no_antrian . " Berhasil dipendingkan"
+		        );
+		    } else {
+		        return array(
+		            'status' => 2,
+		            'message' => "Gagal mem-pendingkan No. Antrian: " . $no_antrian
+		        );
+		    }
+		}
 	}
 
 ?>
