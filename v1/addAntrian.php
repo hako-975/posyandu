@@ -1,6 +1,6 @@
 <?php 
+require_once 'connection.php';
 
-require_once '../includes/DbOperations.php';
 $response = array();
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -8,10 +8,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		// kode 0 nik sudah ada antrian pending
 		// kode 1 berhasil
 		// kode 2 gagal
+		$result = createAntrian($_POST['nik']);
 
-		$db = new DbOperations();
-		
-		$result = $db->createAntrian($_POST['nik']);
 		if ($result['status'] == 1) {
 			$response['error'] = false;
 			$response['message'] = $result['message'];
@@ -30,7 +28,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	$response['error'] = true;
 	$response['message'] = "Invalid Request";
 }
-
 echo json_encode($response);
 
 ?>

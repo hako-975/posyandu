@@ -1,6 +1,5 @@
 <?php 
-
-require_once '../includes/DbOperations.php';
+require_once 'connection.php';
 $response = array();
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -14,9 +13,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			$response['message'] = "Semua input harus diisi";
 			$response['kode'] = 3;
 		} else {
-			$db = new DbOperations();
-			if ($db->userLogin($_POST['nik'], $_POST['password'])) {
-				$user = $db->getUserByNik($_POST['nik']);
+			if (userLogin($_POST['nik'], $_POST['password'])) {
+				$user = getUserByNik($_POST['nik']);
 				$response['error'] = false;
 				$response['nik'] = $user['nik'];
 				$response['nama_lengkap'] = $user['nama_lengkap'];

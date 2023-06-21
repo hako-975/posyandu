@@ -1,5 +1,5 @@
 <?php 
-$koneksi = mysqli_connect("localhost", "root", "", "posyandu");
+require_once 'connection.php';
  ?>
 
  <!DOCTYPE html>
@@ -11,7 +11,7 @@ $koneksi = mysqli_connect("localhost", "root", "", "posyandu");
  </head>
  <body>
  	<form action="addAntrian.php" method="post">
- 		<input type="text" name="nik">
+        <input type="text" name="nik">
  		<button type="submit">submit</button>
  	</form>
  </body>

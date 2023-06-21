@@ -1,11 +1,9 @@
 <?php 
 
-require_once '../includes/DbOperations.php';
+require_once 'connection.php';
 $response = array();
 
-$db = new DbOperations();
-		
-$result = $db->deleteAllAntrian();
+$result = deleteAllAntrian();
 if ($result['status'] == 1) {
 	$response['error'] = false;
 	$response['message'] = $result['message'];

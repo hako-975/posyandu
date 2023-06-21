@@ -1,6 +1,7 @@
 <?php 
 
-require_once '../includes/DbOperations.php';
+require_once 'connection.php';
+
 $response = array();
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -15,8 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			$response['message'] = "Semua input harus diisi";
 			$response['kode'] = 3;
 		} else {
-			$db = new DbOperations();
-			$result = $db->createUser($_POST['nik'], $_POST['nama_lengkap'], $_POST['password']);
+			$result = createUser($_POST['nik'], $_POST['nama_lengkap'], $_POST['password']);
 			if ($result == 1) {
 				$response['error'] = false;
 				$response['message'] = "Registrasi berhasil";
